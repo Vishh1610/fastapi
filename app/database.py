@@ -2,8 +2,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from .config import settings
+from urllib.parse import quote_plus
 
-sqlalchemy_database_url = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}' 
+password = quote_plus(settings.database_password)
+
+sqlalchemy_database_url = (
+    f"postgresql://{settings.database_username}:"
+    f"{password}@"
+    f"{settings.database_hostname}:"
+    f"{settings.database_port}/"
+    f"{settings.database_name}"
+)  
 
 engine = create_engine(sqlalchemy_database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
